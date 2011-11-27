@@ -37,27 +37,56 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
-from selenium import selenium
-from vars import ConnectionParameters
 from page import Page
+from selenium.webdriver.common.by import By
 
 
 class MySiteHomePage(Page):
 
-    _some_locator = 'id=someLocator'
+    _some_locator = (By.ID, 'some_locator')
 
-    def __init__(self, selenium):
-        ''' Creates a new instance of the class and gets the page ready for testing '''
-        self.sel = selenium
-
-    @property
-    def item_on_page(self):
-        return self._some_locator
+    def go_to_home_page(self):
+        self.selenium.get(self.base_url)
 
     @property
-    def get_page_title(self):
-        return self.sel.get_title()
+    def page_title(self):
+        return self.selenium.title
 
-    def do_something_on_the_page(self):
-        pass
+    @property
+    def header(self):
+        return MySiteHomePage.HeaderRegion(self.testsetup)
+
+    @property
+    def footer(self):
+        return MySiteHomePage.FooterRegion(self.testsetup)
+    
+    class HeaderRegion(Page):
+
+        #Header Locators List
+        _home_link_locator = (By.ID, "bla bla")
+        _signin_link_locator = (By.NAME, "bla bla")
+        _signout_link_locator = (By.CSS_SELECTOR, "#bla bla bla")
+        _myaccount_link_locator = (By.XPATH, "bla bla bla")
+
+        @property
+        def logged_in(self):
+            return self.is_element_visible(*self._signout_link_locator)
+
+        @property
+        def logged_out(self):
+            return self.is_element_visible(*self._signin_link_locator)
+
+        def click_home_logo(self):
+            self.selenium.find_element(*self._home_link_locator).click()
+
+        def click_signin(self):
+            self.selenium.find_element(*self._signin_link_locator).click()
+
+        def click_signout(self):
+            self.selenium.find_element(*self._signout_link_locator).click()
+
+    class FooterRegion(Page):
+        
+        #Footer Locators List
+        _footer_link_locator = (By.CSS_SELECTOR, "bla bla")
+        
