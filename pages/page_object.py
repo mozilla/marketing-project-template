@@ -44,14 +44,23 @@ from selenium.webdriver.common.by import By
 class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
-
+    _page_title = "MySiteHomePage Page Title" 
+    
     def go_to_home_page(self):
         self.selenium.get(self.base_url)
 
-    @property
-    def page_title(self):
-        return self.selenium.title
+    def is_response_200(self):
+        # check if response status 200
+        return
+    
+    def is_response_404(self):
+        # check if response status 404
+        return
 
+    def is_response_503(self):
+        # check if response status 503
+        return
+    
     @property
     def header(self):
         return MySiteHomePage.HeaderRegion(self.testsetup)
@@ -60,13 +69,32 @@ class MySiteHomePage(Page):
     def footer(self):
         return MySiteHomePage.FooterRegion(self.testsetup)
     
+    def sharelinks(self):
+        return MySiteHomePage.ShareLinksRegion(self.testsetup)
+    
     class HeaderRegion(Page):
-
+        
+        _header_locator = (By.ID, "branding")
+        
         #Header Locators List
         _home_link_locator = (By.ID, "bla bla")
         _signin_link_locator = (By.NAME, "bla bla")
         _signout_link_locator = (By.CSS_SELECTOR, "#bla bla bla")
         _myaccount_link_locator = (By.XPATH, "bla bla bla")
+        _language_locator = (By.ID, "flang")
+        
+        _mozilla_logo_link_locator = (By.CSS_SELECTOR, ".mozilla")
+
+        def click_home_logo(self):
+            self.selenium.find_element(*self._home_link_locator).click()
+
+        @property
+        def is_mozilla_logo_visible(self):
+            return self.is_element_visible(self._mozilla_logo_link_locator)
+
+        def click_mozilla_logo(self):
+            self.selenium.find_element(*self._mozilla_logo_link_locator).click()
+
 
         @property
         def logged_in(self):
@@ -76,9 +104,6 @@ class MySiteHomePage(Page):
         def logged_out(self):
             return self.is_element_visible(*self._signin_link_locator)
 
-        def click_home_logo(self):
-            self.selenium.find_element(*self._home_link_locator).click()
-
         def click_signin(self):
             self.selenium.find_element(*self._signin_link_locator).click()
 
@@ -87,6 +112,14 @@ class MySiteHomePage(Page):
 
     class FooterRegion(Page):
         
+        _footer_locator = (By.ID, "footer")
         #Footer Locators List
         _footer_link_locator = (By.CSS_SELECTOR, "bla bla")
         
+        def change_locale(self):
+            self.selenium.find_element(*self._language_locator).click()
+        
+    class ShareLinksRegion(Page):
+        
+        _twitter_twit_locator = (By.ID, "twitter")
+        _facebook_like_locator = (By.ID, "facebook")
