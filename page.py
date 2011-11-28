@@ -88,6 +88,9 @@ class Page(object):
     def get_url_current_page(self):
         return(self.selenium.current_url)
 
+    def get_page_title(self):
+        return self.selenium.title
+
     def refresh(self):
         self.selenium.refresh
 

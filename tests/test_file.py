@@ -46,3 +46,30 @@ class TestTemplate:
 
     def test_that_we_do_something_to_find_a_bug(self, mozwebqa):
         pass
+
+    def test_header(self, mozwebqa):
+        pass
+
+    def test_footer(self, mozwebqa):
+        pass
+
+    def test_locale(self, mozwebqa):
+        pass
+
+    def test_respose(self, mozwebqa):
+        pass
+    
+    def test_login(self, mozwebqa):
+        pass
+
+    def test_logout(self, mozwebqa):
+        pass
+
+    def test_create_account(self, mozwebqa):
+        pass
+
+    def test_input_forms_security(self, mozwebqa):
+        pass
+    
+    def test_pagination(self, mozwebqa):
+        pass
