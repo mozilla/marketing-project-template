@@ -46,34 +46,37 @@ class TestTemplate():
     ################################################################
     # GENERAL TEST LIST OF MAIN FUNCTIONALITY FOR MARKETING PRODUCTS
     ################################################################
-    def test_that_we_do_something_to_find_a_bug(self, mozwebqa):
-        pass
-
-    def test_header(self, mozwebqa):
-        pass
-
-    def test_footer(self, mozwebqa):
-        pass
-
-    def test_locale(self, mozwebqa):
-        pass
+#    def test_that_we_do_something_to_find_a_bug(self, mozwebqa):
+#        pass
+#
+#    def test_header(self, mozwebqa):
+#        pass
+#
+#    def test_footer(self, mozwebqa):
+#        pass
+#
+#    def test_locale(self, mozwebqa):
+#        pass
 
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-        response = main_page.get_response_code('url')
-        Assert.equal(response, 'The request returned an HTTP 200 response.')
+        for url in main_page.get_all_links():            
+            if '#' in url:
+                continue
+            response = main_page.get_response_code(url)
+            Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
 
-    def test_login(self, mozwebqa):
-        pass
-
-    def test_logout(self, mozwebqa):
-        pass
-
-    def test_create_account(self, mozwebqa):
-        pass
-
-    def test_input_forms_security(self, mozwebqa):
-        pass
-
-    def test_pagination(self, mozwebqa):
-        pass
+#    def test_login(self, mozwebqa):
+#        pass
+#
+#    def test_logout(self, mozwebqa):
+#        pass
+#
+#    def test_create_account(self, mozwebqa):
+#        pass
+#
+#    def test_input_forms_security(self, mozwebqa):
+#        pass
+#
+#    def test_pagination(self, mozwebqa):
+#        pass

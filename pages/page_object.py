@@ -47,6 +47,13 @@ class MySiteHomePage(Page):
     _some_locator = (By.ID, 'some_locator')
     _page_title = 'MySiteHomePage Page Title' 
     
+    
+    def __init__(self, testsetup, open_url=True):
+        ''' Creates a new instance of the class and gets the page ready for testing '''
+        Page.__init__(self, testsetup)
+        if open_url:
+            self.selenium.get(self.base_url)
+            
     def go_to_home_page(self):
         self.selenium.get(self.base_url)
 
@@ -62,7 +69,10 @@ class MySiteHomePage(Page):
         else:
             result = 'The response code was %s' % response.getcode()
         return result
- 
+
+    def get_all_links(self):
+        return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
+
     @property
     def header(self):
         return MySiteHomePage.HeaderRegion(self.testsetup)
