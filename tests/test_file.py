@@ -37,13 +37,15 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
 
 
-class TestTemplate:
+class TestTemplate():
 
+    ################################################################
+    # GENERAL TEST LIST OF MAIN FUNCTIONALITY FOR MARKETING PRODUCTS
+    ################################################################
     def test_that_we_do_something_to_find_a_bug(self, mozwebqa):
         pass
 
@@ -56,9 +58,11 @@ class TestTemplate:
     def test_locale(self, mozwebqa):
         pass
 
-    def test_respose(self, mozwebqa):
-        pass
-    
+    def test_response_200(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        response = main_page.get_response_code('url')
+        Assert.equal(response, 'The request returned an HTTP 200 response.')
+
     def test_login(self, mozwebqa):
         pass
 
@@ -70,6 +74,6 @@ class TestTemplate:
 
     def test_input_forms_security(self, mozwebqa):
         pass
-    
+
     def test_pagination(self, mozwebqa):
         pass

@@ -40,27 +40,29 @@
 from page import Page
 from selenium.webdriver.common.by import By
 
+import urllib
 
 class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
-    _page_title = "MySiteHomePage Page Title" 
+    _page_title = 'MySiteHomePage Page Title' 
     
     def go_to_home_page(self):
         self.selenium.get(self.base_url)
 
-    def is_response_200(self):
+    def get_response_code(self, url):
         # check if response status 200
-        return
-    
-    def is_response_404(self):
-        # check if response status 404
-        return
-
-    def is_response_503(self):
-        # check if response status 503
-        return
-    
+        response = urllib.urlopen(url)
+        if response.getcode() == 200:
+            result = 'The request returned an HTTP 200 response.'
+        elif response.getcode() == 404:
+            result = 'The request returned an HTTP 404 response.'
+        elif response.getcode() == 503:
+            result = 'The request returned an HTTP 503 response.'
+        else:
+            result = 'The response code was %s' % response.getcode()
+        return result
+ 
     @property
     def header(self):
         return MySiteHomePage.HeaderRegion(self.testsetup)
@@ -74,16 +76,16 @@ class MySiteHomePage(Page):
     
     class HeaderRegion(Page):
         
-        _header_locator = (By.ID, "branding")
+        _header_locator = (By.ID, 'branding')
         
         #Header Locators List
-        _home_link_locator = (By.ID, "bla bla")
-        _signin_link_locator = (By.NAME, "bla bla")
-        _signout_link_locator = (By.CSS_SELECTOR, "#bla bla bla")
-        _myaccount_link_locator = (By.XPATH, "bla bla bla")
-        _language_locator = (By.ID, "flang")
+        _home_link_locator = (By.ID, 'bla bla')
+        _signin_link_locator = (By.NAME, 'bla bla')
+        _signout_link_locator = (By.CSS_SELECTOR, '#bla bla bla')
+        _myaccount_link_locator = (By.XPATH, 'bla bla bla')
+        _language_locator = (By.ID, 'flang')
         
-        _mozilla_logo_link_locator = (By.CSS_SELECTOR, ".mozilla")
+        _mozilla_logo_link_locator = (By.CSS_SELECTOR, '.mozilla')
 
         def click_home_logo(self):
             self.selenium.find_element(*self._home_link_locator).click()
@@ -112,14 +114,14 @@ class MySiteHomePage(Page):
 
     class FooterRegion(Page):
         
-        _footer_locator = (By.ID, "footer")
+        _footer_locator = (By.ID, 'footer')
         #Footer Locators List
-        _footer_link_locator = (By.CSS_SELECTOR, "bla bla")
+        _footer_link_locator = (By.CSS_SELECTOR, 'bla bla')
         
         def change_locale(self):
             self.selenium.find_element(*self._language_locator).click()
         
     class ShareLinksRegion(Page):
         
-        _twitter_twit_locator = (By.ID, "twitter")
-        _facebook_like_locator = (By.ID, "facebook")
+        _twitter_twit_locator = (By.ID, 'twitter')
+        _facebook_like_locator = (By.ID, 'facebook')
