@@ -70,6 +70,10 @@ class MySiteHomePage(Page):
             result = 'The response code was %s' % response.getcode()
         return result
 
+    def validate_link(self, url):
+        w3c_validator = 'http://validator.w3.org/'
+        return urllib.urlopen(w3c_validator + 'check?uri=' + url).info()
+
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 

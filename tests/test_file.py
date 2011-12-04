@@ -60,11 +60,18 @@ class TestTemplate():
 
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-        for url in main_page.get_all_links():            
+        for url in main_page.get_all_links():
             if '#' in url:
                 continue
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
+
+    def test_validate_links(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        home_link = main_page.validate_link(main_page.base_url)
+        status = home_link.getheader('x-w3c-validator-status')
+        Assert.equal(status, 'Valid', 'There are %s Errors and %s Warnings' % (home_link.getheader('x-w3c-validator-errors'), home_link.getheader('x-w3c-validator-warnings')))
+
 
 #    def test_login(self, mozwebqa):
 #        pass
