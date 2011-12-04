@@ -41,19 +41,20 @@ from page import Page
 from selenium.webdriver.common.by import By
 
 import urllib
+import re
+
 
 class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
-    _page_title = 'MySiteHomePage Page Title' 
-    
-    
+    _page_title = 'MySiteHomePage Page Title'
+
     def __init__(self, testsetup, open_url=True):
         ''' Creates a new instance of the class and gets the page ready for testing '''
         Page.__init__(self, testsetup)
         if open_url:
             self.selenium.get(self.base_url)
-            
+
     def go_to_home_page(self):
         self.selenium.get(self.base_url)
 
@@ -74,6 +75,11 @@ class MySiteHomePage(Page):
         w3c_validator = 'http://validator.w3.org/'
         return urllib.urlopen(w3c_validator + 'check?uri=' + url).info()
 
+    def validate_feed(self, url):
+        feed_validator = 'http://feedvalidator.org/'
+        result = urllib.urlopen(feed_validator + 'check.cgi?url=' + url).read()
+        return re.search("This is a valid RSS feed", result)
+
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 
@@ -84,21 +90,21 @@ class MySiteHomePage(Page):
     @property
     def footer(self):
         return MySiteHomePage.FooterRegion(self.testsetup)
-    
+
     def sharelinks(self):
         return MySiteHomePage.ShareLinksRegion(self.testsetup)
-    
+
     class HeaderRegion(Page):
-        
+
         _header_locator = (By.ID, 'branding')
-        
+
         #Header Locators List
         _home_link_locator = (By.ID, 'bla bla')
         _signin_link_locator = (By.NAME, 'bla bla')
         _signout_link_locator = (By.CSS_SELECTOR, '#bla bla bla')
         _myaccount_link_locator = (By.XPATH, 'bla bla bla')
         _language_locator = (By.ID, 'flang')
-        
+
         _mozilla_logo_link_locator = (By.CSS_SELECTOR, '.mozilla')
 
         def click_home_logo(self):
@@ -110,7 +116,6 @@ class MySiteHomePage(Page):
 
         def click_mozilla_logo(self):
             self.selenium.find_element(*self._mozilla_logo_link_locator).click()
-
 
         @property
         def logged_in(self):
@@ -127,15 +132,15 @@ class MySiteHomePage(Page):
             self.selenium.find_element(*self._signout_link_locator).click()
 
     class FooterRegion(Page):
-        
+
         _footer_locator = (By.ID, 'footer')
         #Footer Locators List
         _footer_link_locator = (By.CSS_SELECTOR, 'bla bla')
-        
+
         def change_locale(self):
             self.selenium.find_element(*self._language_locator).click()
-        
+
     class ShareLinksRegion(Page):
-        
+
         _twitter_twit_locator = (By.ID, 'twitter')
         _facebook_like_locator = (By.ID, 'facebook')

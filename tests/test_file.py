@@ -72,6 +72,12 @@ class TestTemplate():
         status = home_link.getheader('x-w3c-validator-status')
         Assert.equal(status, 'Valid', 'There are %s Errors and %s Warnings' % (home_link.getheader('x-w3c-validator-errors'), home_link.getheader('x-w3c-validator-warnings')))
 
+    def test_validate_feeds(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+
+        feed_link = main_page.validate_feed('http://blog.mozilla.com/feed/')
+        Assert.not_none(feed_link)
+
 
 #    def test_login(self, mozwebqa):
 #        pass
