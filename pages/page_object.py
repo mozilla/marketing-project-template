@@ -48,6 +48,7 @@ class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
     _page_title = 'MySiteHomePage Page Title'
+    _switch_language_locator = (By.CSS_SELECTOR, 'bla bla')
 
     def __init__(self, testsetup, open_url=True):
         ''' Creates a new instance of the class and gets the page ready for testing '''
@@ -83,6 +84,9 @@ class MySiteHomePage(Page):
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 
+    def change_locale(self):
+        self.selenium.find_element(*self._switch_language_locator).click()
+
     @property
     def header(self):
         return MySiteHomePage.HeaderRegion(self.testsetup)
@@ -103,7 +107,6 @@ class MySiteHomePage(Page):
         _signin_link_locator = (By.NAME, 'bla bla')
         _signout_link_locator = (By.CSS_SELECTOR, '#bla bla bla')
         _myaccount_link_locator = (By.XPATH, 'bla bla bla')
-        _language_locator = (By.ID, 'flang')
 
         _mozilla_logo_link_locator = (By.CSS_SELECTOR, '.mozilla')
 
@@ -137,10 +140,23 @@ class MySiteHomePage(Page):
         #Footer Locators List
         _footer_link_locator = (By.CSS_SELECTOR, 'bla bla')
 
-        def change_locale(self):
-            self.selenium.find_element(*self._language_locator).click()
-
     class ShareLinksRegion(Page):
 
-        _twitter_twit_locator = (By.ID, 'twitter')
-        _facebook_like_locator = (By.ID, 'facebook')
+        _root_locator = (By.CSS_SELECTOR, '#share')
+        _share_title = (By.CSS_SELECTOR, 'title')
+        _twitter_twit_locator = (By.CSS_SELECTOR, '#twitter')
+        _facebook_like_locator = (By.CSS_SELECTOR, '#facebook')
+
+        @property
+        def _root_element(self):
+            return self.selenium.find_element(*self._root_locator)
+
+        def click_share_on_facebook(self):
+            self._root_element.find_element(*self._facebook_like_locator).click()
+
+        def click_share_on_twitter(self):
+            self._root_element.find_element(*self._twitter_twit_locator).click()
+
+        @property
+        def share_title_text(self):
+            return self._root_element.find_element(*self._share_title).text
