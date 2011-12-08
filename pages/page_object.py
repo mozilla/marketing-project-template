@@ -98,6 +98,19 @@ class MySiteHomePage(Page):
     def sharelinks(self):
         return MySiteHomePage.ShareLinksRegion(self.testsetup)
 
+    def get_favicon_link(self, url):
+        _possible_fav_locator = ['link[rel=\'icon\']', 'link[rel=\'shortcut icon\']']
+
+        def favicon(locator):
+            return self.selenium.find_element(By.CSS_SELECTOR, locator)
+
+        for i in _possible_fav_locator:
+            try:
+                favicon = self.selenium.find_element(By.CSS_SELECTOR, i)
+                return favicon.get_attribute('href')
+            except:
+                False
+
     class HeaderRegion(Page):
 
         _header_locator = (By.ID, 'branding')

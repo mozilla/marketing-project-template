@@ -78,6 +78,17 @@ class TestTemplate():
         feed_link = main_page.validate_feed('http://blog.mozilla.com/feed/')
         Assert.not_none(feed_link)
 
+    def test_favicon_exist(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        #Assert.not_none(main_page.get_favicon_link)
+        link = main_page.get_favicon_link(main_page.base_url)
+        if link:
+            Assert.contains('favicon.ico', link)
+            response = main_page.get_response_code(link)
+        else:
+            link = '%sfavicon.ico' % main_page.base_url
+            response = main_page.get_response_code(link)
+        Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % link)
 
 #    def test_login(self, mozwebqa):
 #        pass
