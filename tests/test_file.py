@@ -66,6 +66,16 @@ class TestTemplate():
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
 
+    def test_response_404(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        garbage_path = ['76976cd1a3cbadaf77533a', 'garbage123213', 'blablabla']
+        for path in garbage_path:            
+            url = main_page.base_url + path
+            response = main_page.get_response_code(url)
+            Assert.equal(response, 'The request returned an HTTP 404 response.', 'in url: %s' % url)
+            Assert.true(main_page.is_404_page_present(url))
+        
+        
     def test_validate_links(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         home_link = main_page.validate_link(main_page.base_url)

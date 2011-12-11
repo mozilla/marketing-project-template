@@ -50,6 +50,7 @@ class MySiteHomePage(Page):
     _some_locator = (By.ID, 'some_locator')
     _page_title = 'MySiteHomePage Page Title'
     _switch_language_locator = (By.CSS_SELECTOR, 'bla bla')
+    _404_page_locator = (By.ID, 'mozilla-404')
 
     def __init__(self, testsetup, open_url=True):
         ''' Creates a new instance of the class and gets the page ready for testing '''
@@ -92,6 +93,11 @@ class MySiteHomePage(Page):
             result = "No robots.txt file was found."
         return result
 
+    def is_404_page_present(self, url):
+        self.selenium.get(url)
+        return self.is_element_visible(*self._404_page_locator)
+         
+        
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 
@@ -111,9 +117,6 @@ class MySiteHomePage(Page):
 
     def get_favicon_link(self, url):
         _possible_fav_locator = ['link[rel=\'icon\']', 'link[rel=\'shortcut icon\']']
-
-        def favicon(locator):
-            return self.selenium.find_element(By.CSS_SELECTOR, locator)
 
         for i in _possible_fav_locator:
             try:
