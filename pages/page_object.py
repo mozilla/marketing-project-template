@@ -40,6 +40,7 @@
 from page import Page
 from selenium.webdriver.common.by import By
 
+from urlparse import urlparse
 import urllib
 import re
 
@@ -80,6 +81,16 @@ class MySiteHomePage(Page):
         feed_validator = 'http://feedvalidator.org/'
         result = urllib.urlopen(feed_validator + 'check.cgi?url=' + url).read()
         return re.search("This is a valid RSS feed", result)
+
+    def is_robot_txt_present(self, url):
+        u = urlparse(url)
+        roboturl = "%s://%s/robots.txt" % (u.scheme, u.netloc)
+        response = urllib.urlopen(roboturl)
+        if response.getcode() == 200:
+            result = "A robots.txt file is present on the server"
+        else:
+            result = "No robots.txt file was found."
+        return result
 
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]

@@ -85,10 +85,20 @@ class TestTemplate():
         if link:
             Assert.contains('favicon.ico', link)
             response = main_page.get_response_code(link)
+        elif link == None:
+            u = self.urlparse(main_page.base_url)
+            link = "%s://%s/favicon.ico" % (u.scheme, u.netloc)
+            response = main_page.get_response_code(link)
         else:
             link = '%sfavicon.ico' % main_page.base_url
             response = main_page.get_response_code(link)
         Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % link)
+
+    def test_robot_txt_present_on_site(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        result = main_page.is_robot_txt_present(main_page.base_url)
+        Assert.equal(result, "A robots.txt file is present on the server")
+        #TODO: Could be added comparing with proper robots.txt file
 
 #    def test_login(self, mozwebqa):
 #        pass
