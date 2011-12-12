@@ -36,9 +36,13 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
+import pytest
+import re
 
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
+
+xfail = pytest.mark.xfail
 
 
 class TestTemplate():
@@ -68,14 +72,13 @@ class TestTemplate():
 
     def test_response_404(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-        garbage_path = ['76976cd1a3cbadaf77533a', 'garbage123213', 'blablabla']
-        for path in garbage_path:            
+        garbage_path = ['/76976cd1a3cbadaf77533a', '/garbage123213', '/blablabla']
+        for path in garbage_path:
             url = main_page.base_url + path
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 404 response.', 'in url: %s' % url)
             Assert.true(main_page.is_404_page_present(url))
-        
-        
+
     def test_validate_links(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         home_link = main_page.validate_link(main_page.base_url)
@@ -93,7 +96,9 @@ class TestTemplate():
         #Assert.not_none(main_page.get_favicon_link)
         link = main_page.get_favicon_link(main_page.base_url)
         if link:
-            Assert.contains('favicon.ico', link)
+            print link
+            Assert.not_none(re.search('favicon.(ico|png|gif)', link))
+            #Assert.contains('favicon.ico', link)
             response = main_page.get_response_code(link)
         elif link == None:
             u = self.urlparse(main_page.base_url)
@@ -104,6 +109,7 @@ class TestTemplate():
             response = main_page.get_response_code(link)
         Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % link)
 
+    @xfail(reason="not everywhere we have robots :( ")
     def test_robot_txt_present_on_site(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         result = main_page.is_robot_txt_present(main_page.base_url)
