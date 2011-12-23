@@ -51,6 +51,7 @@ class MySiteHomePage(Page):
     _page_title = 'MySiteHomePage Page Title'
     _switch_language_locator = (By.CSS_SELECTOR, 'bla bla')
     _404_page_locator = (By.ID, 'mozilla-404')
+    _feed_link_locator = (By.CSS_SELECTOR, '#home-news-blog a')
 
     def __init__(self, testsetup, open_url=True):
         ''' Creates a new instance of the class and gets the page ready for testing '''
@@ -77,6 +78,10 @@ class MySiteHomePage(Page):
     def validate_link(self, url):
         w3c_validator = 'http://validator.w3.org/'
         return urllib.urlopen(w3c_validator + 'check?uri=' + url).info()
+
+    @property
+    def get_feed_link(self):
+        return self.selenium.find_element(*self._feed_link_locator).get_attribute('href')
 
     def validate_feed(self, url):
         feed_validator = 'http://feedvalidator.org/'

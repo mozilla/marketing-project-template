@@ -87,9 +87,10 @@ class TestTemplate():
 
     def test_validate_feeds(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-
-        feed_link = main_page.validate_feed('http://blog.mozilla.com/feed/')
-        Assert.not_none(feed_link)
+        #feed_link = main_page.get_feed_link
+        feed_link = 'http://blog.mozilla.com/feed/'
+        validate_result = main_page.validate_feed(feed_link)
+        Assert.not_none(validate_result)
 
     def test_favicon_exist(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
