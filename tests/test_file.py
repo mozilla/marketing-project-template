@@ -20,8 +20,8 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s):
-#   David Burns
+# Contributor(s): David Burns
+#                 Sergey Tupchiy(tupchii.sergii@gmail.com)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -94,12 +94,11 @@ class TestTemplate():
 
     def test_favicon_exist(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-        #Assert.not_none(main_page.get_favicon_link)
         link = main_page.get_favicon_link(main_page.base_url)
         if link:
-            print link
-            Assert.not_none(re.search('favicon.(ico|png|gif)', link))
-            #Assert.contains('favicon.ico', link)
+            match = re.search('favicon.(ico|png|gif)', link)
+            if match:
+                Assert.contains('favicon', link)
             response = main_page.get_response_code(link)
         elif link == None:
             u = self.urlparse(main_page.base_url)

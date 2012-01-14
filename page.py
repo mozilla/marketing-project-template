@@ -20,10 +20,10 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
+# Contributor(s): Vishal
+#                 Dave Hunt <dhunt@mozilla.com>
+#                 David Burns
+#                 Sergey Tupchiy(tupchii.sergii@gmail.com)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -96,31 +96,3 @@ class Page(object):
 
     def return_to_previous_page(self):
         self.selenium.back()
-#
-#    def wait_for_element_present(self, element):
-#        count = 0
-#        while not self.is_element_present(element):
-#            time.sleep(1)
-#            count += 1
-#            if count == page_load_timeout/1000:
-#                self.record_error()
-#                raise Exception(element + ' has not loaded')
-#
-#    def wait_for_element_visible(self, element):
-#        self.wait_for_element_present(element)
-#        count = 0
-#        while not self.is_element_visible(element):
-#            time.sleep(1)
-#            count += 1
-#            if count == page_load_timeout/1000:
-#                self.record_error()
-#                raise Exception(element + " is not visible")
-#
-#    def wait_for_element_not_visible(self, element):
-#        count = 0
-#        while self.is_element_visible(element):
-#            time.sleep(1)
-#            count += 1
-#            if count == page_load_timeout/1000:
-#                self.record_error()
-#                raise Exception(element + " is still visible")

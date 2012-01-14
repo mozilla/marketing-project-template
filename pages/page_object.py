@@ -20,8 +20,8 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s):
-#   David Burns
+# Contributor(s): David Burns
+#                 Sergey Tupchiy(tupchii.sergii@gmail.com)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -101,8 +101,7 @@ class MySiteHomePage(Page):
     def is_404_page_present(self, url):
         self.selenium.get(url)
         return self.is_element_visible(*self._404_page_locator)
-         
-        
+
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 
