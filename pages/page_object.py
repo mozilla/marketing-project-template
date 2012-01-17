@@ -37,12 +37,14 @@
 #
 # ***** END LICENSE BLOCK *****
 
+import urllib
+import os
+import re
+
 from page import Page
 from selenium.webdriver.common.by import By
-
+from BeautifulSoup import BeautifulSoup
 from urlparse import urlparse
-import urllib
-import re
 
 
 class MySiteHomePage(Page):
@@ -77,7 +79,16 @@ class MySiteHomePage(Page):
 
     def validate_link(self, url):
         w3c_validator = 'http://validator.w3.org/'
-        return urllib.urlopen(w3c_validator + 'check?uri=' + url).info()
+
+        content = urllib.urlopen(w3c_validator + 'check?uri=' + url)
+        status = content.info().getheader('x-w3c-validator-status')
+
+        if status != 'Valid':
+            errors = content.info().getheader('x-w3c-validator-errors')
+            warnings = content.info().getheader('x-w3c-validator-warnings')
+            soup = BeautifulSoup(content)
+            err_msg = soup.findAll('h2')
+            self.validation_errors_log(err_msg, errors, warnings)
 
     @property
     def get_feed_link(self):

@@ -39,6 +39,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+import os
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 
@@ -96,3 +98,26 @@ class Page(object):
 
     def return_to_previous_page(self):
         self.selenium.back()
+
+    def validation_errors_log(self, err_msg, errors, warnings):
+        logfile = 'results/validate_errors.html'
+        logfile_dirname = os.path.dirname(logfile)
+        if logfile_dirname and not os.path.exists(logfile_dirname):
+            os.makedirs(logfile_dirname)
+        logfile = open(logfile, 'w')
+        logfile.write('<html><head><title>HTML Validation Report</title><style>')
+        logfile.write('\nbody {font-family: Helvetica, Arial, sans-serif; font-size: 12px}')
+        logfile.write('\nh2 {font-size: 16px; color: red}')
+        logfile.write('\ntable {border: 1px solid #e6e6e6; color: #999; font-size: 12px; border-collapse: collapse}')
+        logfile.write('\n.error, .failed, .invalid, {color: red}')
+        logfile.write('\n</style></head><body>')
+        logfile.write('\n<h1>Summary</h1>')
+        logfile.write(str(err_msg[0]))
+        logfile.write('\n<h1>Results</h2>')
+        logfile.write('<table class="header"><tr><th>Result:</th>')
+        logfile.write('<td colspan="2" class="failed"> %s Errors, %s warning(s)' % (errors, warnings))
+        logfile.write('</td></tr><tr><th><label title="Address of Page to Validate" for="uri">Address</label>:</th>')
+        logfile.write('<td colspan="2">')
+        logfile.write('<input type="text" id="uri" name="uri" value="%s" size="50" /></td></tr>' % self.base_url)
+        logfile.write('\n</table></body></html>')
+        logfile.close()

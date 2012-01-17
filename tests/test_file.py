@@ -38,6 +38,8 @@
 # ***** END LICENSE BLOCK *****
 import pytest
 import re
+import urllib
+from BeautifulSoup import BeautifulSoup
 
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
@@ -81,9 +83,7 @@ class TestTemplate():
 
     def test_validate_links(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
-        home_link = main_page.validate_link(main_page.base_url)
-        status = home_link.getheader('x-w3c-validator-status')
-        Assert.equal(status, 'Valid', 'There are %s Errors and %s Warnings' % (home_link.getheader('x-w3c-validator-errors'), home_link.getheader('x-w3c-validator-warnings')))
+        main_page.validate_link(main_page.base_url)
 
     def test_validate_feeds(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
