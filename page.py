@@ -94,7 +94,7 @@ class Page(object):
         return self.selenium.title
 
     def refresh(self):
-        self.selenium.refresh
+        self.selenium.refresh()
 
     def return_to_previous_page(self):
         self.selenium.back()

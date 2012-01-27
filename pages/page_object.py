@@ -38,7 +38,6 @@
 # ***** END LICENSE BLOCK *****
 
 import urllib
-import os
 import re
 
 from page import Page

@@ -38,8 +38,7 @@
 # ***** END LICENSE BLOCK *****
 import pytest
 import re
-import urllib
-from BeautifulSoup import BeautifulSoup
+from urlparse import urlparse
 
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
@@ -101,7 +100,7 @@ class TestTemplate():
                 Assert.contains('favicon', link)
             response = main_page.get_response_code(link)
         elif link == None:
-            u = self.urlparse(main_page.base_url)
+            u = urlparse(main_page.base_url)
             link = "%s://%s/favicon.ico" % (u.scheme, u.netloc)
             response = main_page.get_response_code(link)
         else:
