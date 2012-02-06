@@ -4,6 +4,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import urllib
+import urllib2
 import re
 
 from page import Page
@@ -104,6 +105,16 @@ class MySiteHomePage(Page):
                 return favicon.get_attribute('href')
             except:
                 False
+
+    def get_response_path(self, url, lang):
+        headers = {
+        'Accept-Language': 'uk',
+        }
+        data = None
+        content = urllib2.Request(url, data, headers)
+        response = urllib2.urlopen(content)
+        path_url = response.geturl()
+        return path_url
 
     class HeaderRegion(Page):
 
