@@ -3,13 +3,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import urllib
 import re
+import urllib2
+
+from urllib2 import HTTPError
+from urlparse import urlparse
+from BeautifulSoup import BeautifulSoup
 
 from page import Page
+
 from selenium.webdriver.common.by import By
-from BeautifulSoup import BeautifulSoup
-from urlparse import urlparse
 
 
 class MySiteHomePage(Page):
@@ -31,21 +34,23 @@ class MySiteHomePage(Page):
 
     def get_response_code(self, url):
         # check if response status 200
-        response = urllib.urlopen(url)
-        if response.getcode() == 200:
+        try:
+            urllib2.urlopen(url)
             result = 'The request returned an HTTP 200 response.'
-        elif response.getcode() == 404:
-            result = 'The request returned an HTTP 404 response.'
-        elif response.getcode() == 503:
-            result = 'The request returned an HTTP 503 response.'
-        else:
-            result = 'The response code was %s' % response.getcode()
+        except HTTPError, e:
+            response_code = e.code
+            if response_code == 404:
+                result = 'The request returned an HTTP 404 response.'
+            elif response_code == 503:
+                result = 'The request returned an HTTP 503 response.'
+            else:
+                result = 'The response code was %s' % response_code
         return result
 
     def validate_link(self, url):
         w3c_validator = 'http://validator.w3.org/'
 
-        content = urllib.urlopen(w3c_validator + 'check?uri=' + url)
+        content = urllib2.urlopen(w3c_validator + 'check?uri=' + url)
         status = content.info().getheader('x-w3c-validator-status')
 
         if status != 'Valid':
@@ -61,13 +66,13 @@ class MySiteHomePage(Page):
 
     def validate_feed(self, url):
         feed_validator = 'http://feedvalidator.org/'
-        result = urllib.urlopen(feed_validator + 'check.cgi?url=' + url).read()
+        result = urllib2.urlopen(feed_validator + 'check.cgi?url=' + url).read()
         return re.search("This is a valid RSS feed", result)
 
     def is_robot_txt_present(self, url):
         u = urlparse(url)
         roboturl = "%s://%s/robots.txt" % (u.scheme, u.netloc)
-        response = urllib.urlopen(roboturl)
+        response = urllib2.urlopen(roboturl)
         if response.getcode() == 200:
             result = "A robots.txt file is present on the server"
         else:
@@ -104,6 +109,16 @@ class MySiteHomePage(Page):
                 return favicon.get_attribute('href')
             except:
                 False
+
+    def get_response_path(self, url, lang):
+        headers = {
+        'Accept-Language': 'uk',
+        }
+        data = None
+        content = urllib2.Request(url, data, headers)
+        response = urllib2.urlopen(content)
+        path_url = response.geturl()
+        return path_url
 
     class HeaderRegion(Page):
 
