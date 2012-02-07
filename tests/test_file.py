@@ -82,6 +82,18 @@ class TestTemplate():
         Assert.equal(result, "A robots.txt file is present on the server")
         #TODO: Could be added comparing with proper robots.txt file
 
+    def test_request_ends_with_slash(self, mozwebqa):
+        # BaseUrl Should be added without language in path for proper tests of locale (e.g. http://mozilla.org/firefox)
+        lang = 'uk'
+        main_page = MySiteHomePage(mozwebqa, False)
+        url_path = urlparse(main_page.base_url)
+        response_path = main_page.get_response_path(main_page.base_url, lang)
+        url_path_re = urlparse(response_path)
+        if (url_path.path == '' and url_path_re.path == '/'):
+            Assert.true(response_path.endswith('/'))
+        else:
+            Assert.contains("/%s/" % lang, response_path)
+
 #    def test_login(self, mozwebqa):
 #        pass
 #
