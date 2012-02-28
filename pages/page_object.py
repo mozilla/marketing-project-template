@@ -19,7 +19,7 @@ class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
     _page_title = 'MySiteHomePage Page Title'
-    _switch_language_locator = (By.CSS_SELECTOR, 'bla bla')
+    language_locator = (By.CSS_SELECTOR, '#language')
     _404_page_locator = (By.ID, 'mozilla-404')
     _feed_link_locator = (By.CSS_SELECTOR, '#home-news-blog a')
 
@@ -86,8 +86,28 @@ class MySiteHomePage(Page):
     def get_all_links(self):
         return [element.get_attribute('href') for element in self.selenium.find_elements(By.TAG_NAME, "a")]
 
-    def change_locale(self):
-        self.selenium.find_element(*self._switch_language_locator).click()
+    @property
+    def is_change_locale_visible(self):
+        return self.is_element_visible(*self.language_locator)
+
+    @property
+    def locales_count(self):
+        locator = (self.language_locator[0], '%s option' % self.language_locator[1])
+        return len(self.selenium.find_elements(*locator))
+
+    @property
+    def selected_lang(self):
+        locator = (self.language_locator[0], '%s option' % self.language_locator[1])
+        return self.selenium.find_element(*locator).get_attribute('value')
+
+    def change_locale(self, lookup):
+        self.selenium.find_element(*self.language_locator).click()
+        if type(lookup) is int:
+            self.selenium.find_element(self.language_locator[0],
+                                       '%s option:nth-child(%i)' % (self.language_locator[1], lookup)).click()
+        elif type(lookup) is unicode:
+            self.selenium.find_element(self.language_locator[0],
+                                       '%s option[value=\'%s\']' % (self.language_locator[1], lookup)).click()
 
     @property
     def header(self):
@@ -112,7 +132,7 @@ class MySiteHomePage(Page):
 
     def get_response_path(self, url, lang):
         headers = {
-        'Accept-Language': 'uk',
+        'Accept-Language': lang,
         }
         data = None
         content = urllib2.Request(url, data, headers)
