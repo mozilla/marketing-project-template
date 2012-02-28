@@ -27,8 +27,21 @@ class TestTemplate():
 #    def test_footer(self, mozwebqa):
 #        pass
 #
-#    def test_locale(self, mozwebqa):
-#        pass
+    def test_locale(self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        if main_page.is_change_locale_visible:
+            for i in range(main_page.locales_count):
+                i += 1
+                main_page.change_locale(i)
+                selected = main_page.selected_lang
+                regex = re.search('((.*-)(.*))', selected)
+                try:
+                    selected = regex.group(2) + regex.group(3).upper()
+                except:
+                    print ""
+                Assert.contains(selected, main_page.get_url_current_page())
+        else:
+            print "There is no language selector on the page"
 
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
