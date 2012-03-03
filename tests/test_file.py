@@ -45,7 +45,8 @@ class TestTemplate():
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         for url in main_page.get_all_links():
-            if '#' in url:
+            # Ignoring js links
+            if '#' or 'javascript' in url:
                 continue
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
