@@ -97,16 +97,15 @@ class TestTemplate():
 
     def test_request_ends_with_slash(self, mozwebqa):
         # BaseUrl Should be added without language in path for proper tests of locale (e.g. http://mozilla.org/firefox)
-        lang = ['en-US', 'de']
+        lang = 'en-US'
         main_page = MySiteHomePage(mozwebqa, False)
         url_path = urlparse(main_page.base_url)
-        for i in lang:
-            response_path = main_page.get_response_path(main_page.base_url, i)
-            url_path_re = urlparse(response_path)
-            if (url_path.path == '' and url_path_re.path == '/'):
-                Assert.true(response_path.endswith('/'))
-            else:
-                Assert.contains("/%s/" % i, response_path)
+        response_path = main_page.get_response_path(main_page.base_url, lang)
+        url_path_re = urlparse(response_path)
+        if (url_path.path == '' and url_path_re.path == '/'):
+            Assert.true(response_path.endswith('/'))
+        else:
+            Assert.contains("/%s/" % lang, response_path)
 
 #    def test_login(self, mozwebqa):
 #        pass
