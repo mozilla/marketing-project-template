@@ -19,7 +19,8 @@ class MySiteHomePage(Page):
 
     _some_locator = (By.ID, 'some_locator')
     _page_title = 'MySiteHomePage Page Title'
-    language_locator = (By.CSS_SELECTOR, '#language')
+    _language_locator = (By.ID, 'language')
+    _language_list_locator = (By.CSS_SELECTOR, '#language option')
     _404_page_locator = (By.ID, 'mozilla-404')
     _feed_link_locator = (By.CSS_SELECTOR, '#home-news-blog a')
 
@@ -88,26 +89,29 @@ class MySiteHomePage(Page):
 
     @property
     def is_change_locale_visible(self):
-        return self.is_element_visible(*self.language_locator)
+        return self.is_element_visible(*self._language_locator)
 
     @property
     def locales_count(self):
-        locator = (self.language_locator[0], '%s option' % self.language_locator[1])
-        return len(self.selenium.find_elements(*locator))
+        return len(self.selenium.find_elements(*self._language_list_locator))
 
     @property
-    def selected_lang(self):
-        locator = (self.language_locator[0], '%s option' % self.language_locator[1])
-        return self.selenium.find_element(*locator).get_attribute('value')
+    def locales(self):
+        return [self.LocaleOption(self.testsetup, lang)
+                for lang in self.selenium.find_elements(*self._language_list_locator)]
 
-    def change_locale(self, lookup):
-        self.selenium.find_element(*self.language_locator).click()
-        if type(lookup) is int:
-            self.selenium.find_element(self.language_locator[0],
-                                       '%s option:nth-child(%i)' % (self.language_locator[1], lookup)).click()
-        elif type(lookup) is unicode:
-            self.selenium.find_element(self.language_locator[0],
-                                       '%s option[value=\'%s\']' % (self.language_locator[1], lookup)).click()
+    class LocaleOption(Page):
+
+        def __init__(self, testsetup, lang):
+            Page.__init__(self, testsetup)
+            self._root_element = lang
+
+        def select(self):
+            self._root_element.click()
+
+        @property
+        def value(self):
+            return self._root_element.get_attribute('value')
 
     @property
     def header(self):
