@@ -31,9 +31,8 @@ class TestTemplate():
         main_page = MySiteHomePage(mozwebqa)
         if main_page.is_change_locale_visible:
             for i in range(main_page.locales_count):
-                i += 1
-                main_page.change_locale(i)
-                selected = main_page.selected_lang
+                main_page.locales[i].select()
+                selected = main_page.locales[i].value
                 regex = re.search('((.*-)(.*))', selected)
                 try:
                     selected = regex.group(2) + regex.group(3).upper()
@@ -46,7 +45,8 @@ class TestTemplate():
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         for url in main_page.get_all_links():
-            if '#' in url:
+            # Ignoring js links
+            if '#' or 'javascript' in url:
                 continue
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
