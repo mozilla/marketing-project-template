@@ -58,7 +58,6 @@ class TestTemplate():
             url = main_page.base_url + path
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 404 response.', 'in url: %s' % url)
-            Assert.true(main_page.is_404_page_present(url))
 
     def test_validate_links(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
