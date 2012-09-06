@@ -27,6 +27,8 @@ class TestTemplate():
 #    def test_footer(self, mozwebqa):
 #        pass
 #
+
+    @pytest.mark.nondestructive
     def test_locale(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         if main_page.is_change_locale_visible:
@@ -42,6 +44,7 @@ class TestTemplate():
         else:
             print "There is no language selector on the page"
 
+    @pytest.mark.nondestructive
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         for url in main_page.get_all_links():
@@ -51,6 +54,7 @@ class TestTemplate():
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % url)
 
+    @pytest.mark.nondestructive
     def test_response_404(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         garbage_path = ['/76976cd1a3cbadaf77533a', '/garbage123213', '/blablabla']
@@ -59,10 +63,12 @@ class TestTemplate():
             response = main_page.get_response_code(url)
             Assert.equal(response, 'The request returned an HTTP 404 response.', 'in url: %s' % url)
 
+    @pytest.mark.nondestructive
     def test_validate_links(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         main_page.validate_link(main_page.base_url)
 
+    @pytest.mark.nondestructive
     def test_validate_feeds(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         #feed_link = main_page.get_feed_link
@@ -70,6 +76,7 @@ class TestTemplate():
         validate_result = main_page.validate_feed(feed_link)
         Assert.not_none(validate_result)
 
+    @pytest.mark.nondestructive
     def test_favicon_exist(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         link = main_page.get_favicon_link(main_page.base_url)
@@ -87,13 +94,14 @@ class TestTemplate():
             response = main_page.get_response_code(link)
         Assert.equal(response, 'The request returned an HTTP 200 response.', 'in url: %s' % link)
 
-    @xfail(reason="not everywhere we have robots :( ")
+    @pytest.mark.nondestructive
     def test_robot_txt_present_on_site(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         result = main_page.is_robot_txt_present(main_page.base_url)
         Assert.equal(result, "A robots.txt file is present on the server")
         #TODO: Could be added comparing with proper robots.txt file
 
+    @pytest.mark.nondestructive
     def test_request_ends_with_slash(self, mozwebqa):
         # BaseUrl Should be added without language in path for proper tests of locale (e.g. http://mozilla.org/firefox)
         lang = 'en-US'
