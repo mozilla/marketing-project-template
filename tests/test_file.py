@@ -45,6 +45,20 @@ class TestTemplate():
             print "There is no language selector on the page"
 
     @pytest.mark.nondestructive
+    def test_locale_zh_TW (self, mozwebqa):
+        main_page = MySiteHomePage(mozwebqa)
+        zh_TW_locale = ['/zh-TW']
+        for path in zh_TW_locale:
+            url = main_page.base_url + path
+
+        if url:
+            Assert.true(url.endswith('/en-US'))
+        else:
+            Assert.true(url.endswith('/en-US'))
+
+            Assert.false(url.endswith('/zh-CN'))
+
+    @pytest.mark.nondestructive
     def test_response_200(self, mozwebqa):
         main_page = MySiteHomePage(mozwebqa)
         for url in main_page.get_all_links():
