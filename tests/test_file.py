@@ -51,12 +51,10 @@ class TestTemplate():
         for path in zh_TW_locale:
             url = main_page.base_url + path
 
-        if url:
-            Assert.true(url.endswith('/en-US'))
-        else:
             Assert.true(url.endswith('/en-US'))
 
-            Assert.false(url.endswith('/zh-CN'))
+            if !url:
+                Assert.false(url.endswith('/zh-CN'))
 
     @pytest.mark.nondestructive
     def test_response_200(self, mozwebqa):
