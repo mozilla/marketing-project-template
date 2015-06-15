@@ -9,6 +9,7 @@ from urlparse import urlparse
 
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
+from urlparse import urljoin
 
 xfail = pytest.mark.xfail
 
@@ -45,16 +46,13 @@ class TestTemplate():
             print "There is no language selector on the page"
 
     @pytest.mark.nondestructive
-    def test_locale_zh_TW (self, mozwebqa):
+    def test_locales_persist_or_fallback_to_en_us(self, mozwebqa):
+        "Test loads locale and displays it or falls back to /en-US"
         main_page = MySiteHomePage(mozwebqa)
-        zh_TW_locale = ['/zh-TW']
-        for path in zh_TW_locale:
-            url = main_page.base_url + path
-
-            Assert.true(url.endswith('/en-US'))
-
-            if !url:
-                Assert.false(url.endswith('/zh-CN'))
+        locales = ['zh-TW']
+        for locale in locales:
+            urlparse.urljoin(main_page.base_url, locales)
+            Assert.true(url.endswith('locales', 'en-US'))
 
     @pytest.mark.nondestructive
     def test_response_200(self, mozwebqa):
