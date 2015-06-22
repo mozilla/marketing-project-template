@@ -5,6 +5,9 @@
 
 import pytest
 import re
+import urllib2
+
+from urlparse import urljoin
 from urlparse import urlparse
 
 from pages.page_object import MySiteHomePage
@@ -43,6 +46,16 @@ class TestTemplate():
                 Assert.contains(selected, main_page.get_url_current_page())
         else:
             print "There is no language selector on the page"
+
+    @pytest.mark.nondestructive
+    def test_locales_persist_or_fallback_to_en_us(self, mozwebqa):
+        "Test loads locale and displays it or falls back to /en-US"
+        main_page = MySiteHomePage(mozwebqa)
+        locales = ['zh-TW']
+        for locale in locales:
+            url = urlparse.urljoin(main_page.base_url, locales)
+            urllib2.urlopen(url)
+            Assert.true(url.endswith('locales', 'en-US'))
 
     @pytest.mark.nondestructive
     def test_response_200(self, mozwebqa):
