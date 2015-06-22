@@ -5,11 +5,13 @@
 
 import pytest
 import re
+import urllib2
+
+from urlparse import urljoin
 from urlparse import urlparse
 
 from pages.page_object import MySiteHomePage
 from unittestzero import Assert
-from urlparse import urljoin
 
 xfail = pytest.mark.xfail
 
@@ -51,7 +53,8 @@ class TestTemplate():
         main_page = MySiteHomePage(mozwebqa)
         locales = ['zh-TW']
         for locale in locales:
-            urlparse.urljoin(main_page.base_url, locales)
+            url = urlparse.urljoin(main_page.base_url, locales)
+            urllib2.urlopen(url)
             Assert.true(url.endswith('locales', 'en-US'))
 
     @pytest.mark.nondestructive
