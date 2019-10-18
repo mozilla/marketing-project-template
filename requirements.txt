@@ -1,5 +1,5 @@
 BeautifulSoup==3.2.1
-PyYAML==3.10
+PyYAML==5.1
 UnittestZero
 certifi==0.0.8
 chardet==2.1.1
